@@ -1,4 +1,6 @@
 // app/page.tsx
+export const dynamic = "force-dynamic"; // ensures server-side rendering
+
 import Image from "next/image";
 import Link from "next/link";
 import { connectDB } from "@/lib/mongodb";
@@ -15,20 +17,22 @@ interface Book {
 
 export default async function Home() {
   await connectDB();
-  // Only fetch 8 featured books for better performance
+
+  // Fetch the latest 8 books from the database
   const dbBooks = await Book.find({})
-    .select('title author price coverImageUrl')
+    .select("title author price coverImageUrl")
     .sort({ createdAt: -1 })
     .limit(8)
     .lean();
+
   const books = (dbBooks as unknown[]).map((b: unknown): Book => {
     const book = b as { _id: unknown; title: string; author: string; price: number; coverImageUrl?: string };
     return {
       id: String(book._id),
-      title: book.title as string,
-      author: book.author as string,
+      title: book.title,
+      author: book.author,
       price: typeof book.price === "number" ? book.price : Number(book.price ?? 0),
-      image: (book.coverImageUrl as string) || "/window.svg",
+      image: book.coverImageUrl || "/window.svg",
     };
   });
 
@@ -64,7 +68,7 @@ export default async function Home() {
               >
                 Browse Books
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </Link>
 
@@ -101,7 +105,7 @@ export default async function Home() {
             { title: "Quality Picks", desc: "Handpicked titles that matter.", icon: "🏆" },
             { title: "Secure Purchase", desc: "Trusted checkout process.", icon: "🔒" },
             { title: "Lifetime Library", desc: "Your books, forever.", icon: "📚" },
-          ].map((f) => (
+          ].map(f => (
             <div key={f.title} className="rounded-2xl bg-white/60 dark:bg-slate-800/60 p-6 backdrop-blur-md border border-white/10 dark:border-white/6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
               <div className="text-3xl">{f.icon}</div>
               <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">{f.title}</h3>
@@ -120,7 +124,7 @@ export default async function Home() {
           </div>
 
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {books.map((book: Book) => (
+            {books.map(book => (
               <BookCard key={book.id} book={book} />
             ))}
           </div>
@@ -131,7 +135,7 @@ export default async function Home() {
       <section className="container mx-auto px-6 py-10">
         <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Browse by Category</h3>
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {["Programming", "Design", "Marketing", "Fiction", "AI/ML", "Finance"].map((c) => (
+          {["Programming", "Design", "Marketing", "Fiction", "AI/ML", "Finance"].map(c => (
             <Link
               key={c}
               href={`/books?category=${encodeURIComponent(c)}`}
@@ -152,7 +156,7 @@ export default async function Home() {
               { q: "Fantastic curation and smooth experience.", a: "Amira" },
               { q: "I found my go-to learning library.", a: "Daniel" },
               { q: "Clean UI and fast checkout.", a: "Sophia" },
-            ].map((t) => (
+            ].map(t => (
               <div key={t.a} className="rounded-2xl bg-white/60 dark:bg-slate-800/60 p-6 shadow-sm backdrop-blur-md border border-white/10 dark:border-white/6">
                 <p className="text-slate-700 dark:text-slate-200">“{t.q}”</p>
                 <p className="mt-3 text-sm font-semibold text-slate-900 dark:text-white">— {t.a}</p>
