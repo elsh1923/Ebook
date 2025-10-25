@@ -1,26 +1,53 @@
+/* 🌟 Existing Animations */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@keyframes slowFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+  100% { transform: translateY(0px); }
+}
+@keyframes tilt {
+  0% { transform: rotate(-2deg) translateY(0); }
+  50% { transform: rotate(2deg) translateY(-6px); }
+  100% { transform: rotate(-2deg) translateY(0); }
+}
+.animate-slow-float { animation: slowFloat 8s ease-in-out infinite; }
+.animate-tilt { animation: tilt 10s ease-in-out infinite; }
+
+/* ✨ NEW: Reader Page Enhancements */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out both;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Smooth UX for reading */
+html, body {
+  scroll-behavior: smooth;
+  font-family: system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 🌓 Dark/Light Mode Compatibility */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-white text-gray-800 dark:bg-slate-900 dark:text-gray-100 transition-colors duration-500;
+}
+
+/* Reader-specific typography */
+.reader-content {
+  @apply leading-relaxed text-lg text-gray-800 dark:text-gray-200;
+}
+
+/* Buttons */
+.button-primary {
+  @apply px-4 py-2 rounded-md bg-indigo-500 text-white font-medium shadow-md hover:bg-indigo-600 active:scale-95 transition-all disabled:opacity-50;
+}
+
+/* Progress bar */
+.progress-container {
+  @apply w-1/2 bg-gray-300 dark:bg-gray-700 h-2 rounded-full overflow-hidden;
+}
+.progress-bar {
+  @apply h-full bg-indigo-500 transition-all duration-500;
 }
