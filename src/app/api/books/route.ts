@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const sortOrder = searchParams.get('sortOrder') || 'desc';
 
     // Build query
-    let query: any = {};
+    const query: Record<string, unknown> = {};
     
     if (category && category !== 'All') {
       query.category = category;
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build sort object
-    const sort: any = {};
+    const sort: Record<string, 1 | -1> = {};
     sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
 
     // Calculate pagination

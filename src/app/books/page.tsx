@@ -67,7 +67,7 @@ export default function BooksPage() {
 
   useEffect(() => {
     fetchBooks();
-  }, [fetchBooks]);
+  }, [currentPage, fetchBooks]);
 
   // Debounced search
   useEffect(() => {
@@ -80,13 +80,13 @@ export default function BooksPage() {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, selectedCategory, sortBy]);
+  }, [searchTerm, selectedCategory, sortBy, currentPage, fetchBooks]);
 
   useEffect(() => {
     if (currentPage !== 1) {
       fetchBooks();
     }
-  }, [currentPage]);
+  }, [currentPage, fetchBooks]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-white/60 dark:from-slate-900 dark:to-slate-900 transition-colors duration-500">

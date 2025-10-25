@@ -70,7 +70,7 @@ export async function GET(
         console.log("- Original URL:", book.fileUrl);
 
         // Use Cloudinary API to download the file directly
-        const result = await cloudinary.v2.api.resource(fullPublicId, {
+        await cloudinary.v2.api.resource(fullPublicId, {
           resource_type: 'raw'
         });
 

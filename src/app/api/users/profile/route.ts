@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
-import Book from "@/models/Book"; // ✅ MUST be imported to register schema
 import { connectDB } from "@/lib/mongodb";
 import { verifyToken } from "@/lib/jwt";
 

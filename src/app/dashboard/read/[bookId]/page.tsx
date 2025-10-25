@@ -259,6 +259,8 @@ export default function PDFReader() {
               <button
                 onClick={() => handleScaleChange(Math.max(0.5, scale - 0.1))}
                 className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                title="Decrease zoom"
+                aria-label="Decrease zoom"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" />
@@ -270,6 +272,8 @@ export default function PDFReader() {
               <button
                 onClick={() => handleScaleChange(Math.min(2.0, scale + 0.1))}
                 className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                title="Increase zoom"
+                aria-label="Increase zoom"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
@@ -342,6 +346,8 @@ export default function PDFReader() {
           onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage <= 1}
           className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          title="Previous page"
+          aria-label="Previous page"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -361,6 +367,9 @@ export default function PDFReader() {
             className="w-16 px-2 py-1 text-center bg-gray-200 dark:bg-gray-700 rounded border-0 focus:ring-2 focus:ring-indigo-500"
             min="1"
             max={numPages}
+            title="Current page number"
+            aria-label="Current page number"
+            placeholder="Page"
           />
           <span className="text-sm text-slate-600 dark:text-slate-300">/ {numPages}</span>
         </div>
@@ -369,6 +378,8 @@ export default function PDFReader() {
           onClick={() => handlePageChange(Math.min(numPages, currentPage + 1))}
           disabled={currentPage >= numPages}
           className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          title="Next page"
+          aria-label="Next page"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -390,26 +401,38 @@ function WatermarkOverlay() {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         setUserEmail(payload.email || "User");
-      } catch (err) {
+      } catch {
         setUserEmail("User");
       }
     }
   }, []);
+
+  const watermarkStyle = {
+    backgroundImage: `repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 100px,
+      rgba(0,0,0,0.1) 100px,
+      rgba(0,0,0,0.1) 200px
+    )`,
+  };
+
+  const copyrightStyle = {
+    backgroundImage: `repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 150px,
+      rgba(0,0,0,0.05) 150px,
+      rgba(0,0,0,0.05) 300px
+    )`,
+  };
 
   return (
     <div className="fixed inset-0 pointer-events-none z-10">
       {/* User Watermark */}
       <div 
         className="absolute inset-0 opacity-10 text-gray-500 dark:text-gray-400"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 100px,
-            rgba(0,0,0,0.1) 100px,
-            rgba(0,0,0,0.1) 200px
-          )`,
-        }}
+        style={watermarkStyle}
       >
         <div className="absolute top-1/4 left-1/4 transform -rotate-45 text-sm font-semibold">
           Purchased by: {userEmail}
@@ -422,15 +445,7 @@ function WatermarkOverlay() {
       {/* Copyright Watermark */}
       <div 
         className="absolute inset-0 opacity-5 text-gray-400 dark:text-gray-500"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 150px,
-            rgba(0,0,0,0.05) 150px,
-            rgba(0,0,0,0.05) 300px
-          )`,
-        }}
+        style={copyrightStyle}
       >
         <div className="absolute top-1/3 right-1/3 transform rotate-12 text-xs">
           © 2025 MyEbookPlatform. All Rights Reserved.

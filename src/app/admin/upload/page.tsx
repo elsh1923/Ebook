@@ -106,8 +106,8 @@ export default function UploadBookPage() {
       } else {
         setError(data.error || "Error uploading book");
       }
-    } catch (err: any) {
-      setError(err.message || "Network error. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Network error. Please try again.");
     } finally {
       setLoading(false);
     }
