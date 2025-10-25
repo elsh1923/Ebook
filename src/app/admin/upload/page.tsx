@@ -17,7 +17,7 @@ export default function UploadBookPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const categories = ["Programming", "Design", "Marketing", "Fiction", "AI/ML", "Finance", "Business", "Technology"];
+  const categories = ["Programming", "Design", "Marketing", "Fiction", "AI/ML", "Finance", "Business", "Technology", "Language"];
 
   // Utility: Upload file to Cloudinary
   const uploadToCloudinary = async (file: File, folder: string) => {

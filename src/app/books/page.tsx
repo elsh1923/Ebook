@@ -32,7 +32,7 @@ export default function BooksPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
 
-  const categories = ["All", "Programming", "Design", "Marketing", "Fiction", "AI/ML", "Finance", "Business", "Technology"];
+  const categories = ["All", "Programming", "Design", "Marketing", "Fiction", "AI/ML", "Finance", "Business", "Technology", "Language"];
 
   const fetchBooks = useCallback(async () => {
     setLoading(true);
